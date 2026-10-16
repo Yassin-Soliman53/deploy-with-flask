@@ -250,6 +250,6 @@ def predict():
     conf = min(max(float(request.form.get("conf", 0.25)), 0.01), 1.0)
     yolo_b64, boxes = detect(img, conf)
     return jsonify(cnn=classify(img), yolo_image=yolo_b64, boxes=boxes)
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
