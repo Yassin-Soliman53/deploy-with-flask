@@ -3,8 +3,8 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Install system dependencies for OpenCV & PyTorch
-RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy all project files (code and model weights)
 COPY . .
 
-# Expose Hugging Face default port
 EXPOSE 7860
 
-# Run the app using Gunicorn or Flask built-in server bound to port 7860
-CMD ["python", "flask_app.py"]
+# Run with a single Gunicorn worker (models are large and loaded at import time),
+# bound to Railway's injected PORT.
+CMD ["sh", "-c", "gunicorn flask_app:app --bind 0.0.0.0:${PORT:-7860} --workers 1 --timeout 120"]
