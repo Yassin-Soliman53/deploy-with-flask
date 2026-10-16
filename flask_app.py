@@ -12,7 +12,6 @@ from flask import Flask, jsonify, render_template_string, request
 from PIL import Image
 from ultralytics import YOLO
 
-# ----------------------------- Config -----------------------------
 CNN_WEIGHTS = "best_resnet_gtsrb.pth"
 YOLO_WEIGHTS = "best.pt"
 
@@ -36,7 +35,6 @@ CLASS_NAMES = [
     "End of no passing for vehicles over 3.5 tonnes",
 ]
 
-# ----------------------------- Models -----------------------------
 def load_cnn():
     m = models.resnet34(weights=None)
     m.fc = nn.Sequential(nn.Dropout(0.3), nn.Linear(m.fc.in_features, 43))
