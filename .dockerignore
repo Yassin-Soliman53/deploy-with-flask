@@ -1,0 +1,6 @@
+archive (3)/
+*.ipynb
+.git
+__pycache__/
+*.pyc
+.gitattributes
